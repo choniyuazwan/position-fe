@@ -8,14 +8,13 @@ import Loading from '../assets/loading.gif';
 import InfiniteScroll from 'react-infinite-scroller';
 import CatItems from '../components/CatItems';
 
-axios.defaults.baseURL = 'https://api.thecatapi.com/v1';
-axios.defaults.headers.common['x-api-key'] = 'DEMO-API-KEY';
+axios.defaults.baseURL = 'http://localhost:8000';
 
 class CatList extends React.Component {
   state = {
     isLoading: true,
     cats: [],
-    page: 0,
+    page: 1,
     limit: 10,
     search: '',
     isMax: false,
@@ -28,12 +27,12 @@ class CatList extends React.Component {
 
   loadData = () => {
     const { limit, page, cats } = this.state;
-    const url = `/breeds?limit=${limit}&page=${page}`;
+    const url = `/positions?page=${page}`;
     axios
-      .get(url)
+      .get(url, { headers: {"Authorization" : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxZDY2MGI3YmI3OTY3ODcyYWExZDEwYiIsImVtYWlsIjoiYnVkaSIsInBhc3N3b3JkIjoiJDJiJDEwJE80RjIzMnd5ZXc0ZEwwWDVxMlFOWU8zcnAvTHRaWDV0YXF1OVVNQ1RULkFhLmZnaEVMdW5HIiwiX192IjowfSwiaWF0IjoxNjQxNDQ1NjQwLCJleHAiOjI1MDUzNTkyNDB9.L3XrFgOprYOpnZCE0l-tpUhdYv_8YFuic46BWRUFtuY`}})
       .then((res) => {
         console.log(res.data);
-        let result = res.data;
+        let result = res.data.data;
         setTimeout(() => {
           this.setState({
             cats: cats.concat(result),
@@ -50,9 +49,10 @@ class CatList extends React.Component {
   };
 
   searchData = () => {
-    axios.get(`/breeds/search?q=${this.state.search}`).then((res) => {
+    axios.get(`/positions?description=${this.state.search}`, { headers: {"Authorization" : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxZDY2MGI3YmI3OTY3ODcyYWExZDEwYiIsImVtYWlsIjoiYnVkaSIsInBhc3N3b3JkIjoiJDJiJDEwJE80RjIzMnd5ZXc0ZEwwWDVxMlFOWU8zcnAvTHRaWDV0YXF1OVVNQ1RULkFhLmZnaEVMdW5HIiwiX192IjowfSwiaWF0IjoxNjQxNDQ1NjQwLCJleHAiOjI1MDUzNTkyNDB9.L3XrFgOprYOpnZCE0l-tpUhdYv_8YFuic46BWRUFtuY`}})
+      .then((res) => {
       console.log('search', res.data);
-      let result = res.data;
+      let result = res.data.data;
       this.setState({ cats: result });
     });
   };
@@ -79,9 +79,9 @@ class CatList extends React.Component {
     return (
       <Container>
         <div style={{textAlign: "center", marginTop: 20}}>
-          <h1>Cats Catalogue</h1>
+          <h1>Job Vacancy</h1>
           <p>
-            Finding all about the cats in the world
+            Finding all jobs suitable for you
           </p>
         </div>
         <Form onSubmit={(e) => e.preventDefault()}>
@@ -107,12 +107,12 @@ class CatList extends React.Component {
                 <img src={Loading} style={{ display: "block", margin: "0 auto" }} alt="loading" />
               ) : (
                   <>
-                    {this.state.cats.map((cats) => (
-                      <div key={cats.id}>
-                        <CatItems cats={cats} />
+                    {this.state.cats.map((cats, index) => {
+                      return <div key={index}>
+                        <CatItems cats={cats}/>
                         <hr/>
                       </div>
-                    ))}
+                    })}
                   </>
                 )}
             </InfiniteScroll>

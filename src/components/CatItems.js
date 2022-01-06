@@ -10,7 +10,22 @@ import {
 
 export default class CatItems extends Component {
     render() {
-        const { name, origin, description, temperament } = this.props.cats
+        // let { title, type, company } = this.props.cats;
+        let title, type, company; 
+        // if (this.props.cats != null) {
+        //     title = this.props.cats.title ? this.props.title : '';
+        //     type = this.props.cats.type ? this.props.type : '';
+        //     company = this.props.cats.company ? this.props.company : '';            
+        // } else {
+        //     title = '';
+        //     type = '';
+        //     company = '';
+        // }
+        
+        title = this.props.cats.title;
+        type = this.props.cats.type;
+        company = this.props.cats.company;
+
         return (
             <>
                 <Container>
@@ -19,7 +34,7 @@ export default class CatItems extends Component {
                             <Card.Header>
                                 <Row>
                                     <Col sm={10}>
-                                        <Card.Title>{name}</Card.Title>
+                                        <Card.Title>{title}</Card.Title>
                                     </Col>
                                     <Col sm={2}>
                                         <Accordion.Toggle as={Button} variant="success" eventKey='0'>
@@ -30,12 +45,11 @@ export default class CatItems extends Component {
                             </Card.Header>
                             <Accordion.Collapse eventKey='0'>
                                 <Card.Body>
-                                    <Card.Subtitle className="mb-2 text-muted"><i>Country : </i>{origin}</Card.Subtitle>
                                     <Card.Text>
-                                        {description}
+                                        {type}
                                     </Card.Text>
                                     <Card.Text className="font-weight-bold">
-                                        Temprament : {temperament}
+                                        {company}
                                     </Card.Text>
                                 </Card.Body>
                             </Accordion.Collapse>
